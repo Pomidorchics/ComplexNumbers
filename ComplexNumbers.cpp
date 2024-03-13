@@ -1,4 +1,7 @@
 ﻿#include <iostream>
+#include <cassert>
+
+using namespace std;
 
 class Complex {
 private:
@@ -66,24 +69,77 @@ public:
     }
 
     // console output
-    friend ostream& operator<<(ostream& out, const Complex& c) {
+    friend ostream& operator<<(std::ostream& out, const Complex& c) {
         out << c.real << " + " << c.imaginary << "i";
         return out;
     }
 };
 
-int main()
-{
-    std::cout << "Hello World!\n";
+void runUnitTests() {
+    Complex c1(1, 2);
+    Complex c2(3, 4);
+    Complex c3(0, 4);
+    Complex c4(3, 0);
+    Complex c5(0, 0);
+
+    // Addition
+    assert((c1 + c2).getReal() == 4 && (c1 + c2).getImaginary() == 6);
+    assert((c1 + c3).getReal() == 1 && (c1 + c3).getImaginary() == 6);
+    assert((c1 + c4).getReal() == 4 && (c1 + c4).getImaginary() == 2);
+    assert((c1 + c5).getReal() == 1 && (c1 + c5).getImaginary() == 2);
+    assert((c2 + c2).getReal() == 6 && (c2 + c2).getImaginary() == 8);
+
+    // Subtraction
+    assert((c2 - c1).getReal() == 2 && (c2 - c1).getImaginary() == 2);
+    assert((c2 - c5).getReal() == 3 && (c2 - c5).getImaginary() == 4);
+    assert((c1 - c2).getReal() == -2 && (c1 - c2).getImaginary() == -2);
+    assert((c1 - c3).getReal() == 1 && (c1 - c3).getImaginary() == -2);
+    assert((c2 - c4).getReal() == 0 && (c2 - c4).getImaginary() == 4);
+    assert((c2 - c2).getReal() == 0 && (c2 - c2).getImaginary() == 0);
+
+    // Multiplication
+    assert((c1 * c2).getReal() == -5 && (c1 * c2).getImaginary() == 10);
+    assert((c1 * c3).getReal() == -8 && (c1 * c3).getImaginary() == 4);
+    assert((c1 * c4).getReal() == 3 && (c1 * c4).getImaginary() == 6);
+    assert((c1 * c5).getReal() == 0 && (c1 * c5).getImaginary() == 0);
+    assert((c1 * c1).getReal() == -3 && (c1 * c1).getImaginary() == 4);
+
+    // Division
+    Complex div = c2 / c1;
+    assert((c1 / c2).getReal() == 0.44 && (c1 / c2).getImaginary() == 0.08);
+    assert((c1 / c3).getReal() == 0.5 && (c1 / c3).getImaginary() == -0.25);
+    assert((c5 / c1).getReal() == 0 && (c5 / c1).getImaginary() == 0);
+    assert((c1 / c1).getReal() == 1 && (c1 / c1).getImaginary() == 0);
+
+    // Comparison
+    assert(c1 != c2);
+    assert(!(c1 == c2));
+    assert(c1 != 1);
+    assert(!(c1 == 1));
+    assert((c5 == 0));
+    assert((c1 == c1));
+
+    // Power
+    assert((c1 ^ 2).getReal() == -3 && (c1 ^ 2).getImaginary() == 4);
+    assert((c5 ^ 2).getReal() == 0 && (c5 ^ 2).getImaginary() == 0);
+    assert((c1 ^ 3).getReal() == -11 && (c1 ^ 3).getImaginary() == -2);
+    assert((c3 ^ 2).getReal() == -16 && (c3 ^ 2).getImaginary() == 0);
+    assert((c4 ^ 3).getReal() == 27 && (c4 ^ 3).getImaginary() == 0);
+
+    // Modulus
+    assert(c1.modulus() == sqrt(5.0));
+    assert(c2.modulus() == 5);
+    assert(c3.modulus() == 4);
+    assert(c4.modulus() == 3);
+    assert(c5.modulus() == 0);
+
+    cout << "All tests passed successfully!";
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+int main() {
+    runUnitTests();
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+    return 0;
+}
+
+
